@@ -40,18 +40,6 @@ RUN apt-get update && apt-get install -y \
   libx265-dev \
   libde265-dev
 
-# BUILD HEIF from src, so that we make sure to add libde265 support
-ARG HEIF_VERSION=1.11.0
-ARG HEIF_URL=https://github.com/strukturag/libheif/releases/download
-
-RUN cd /usr/src \
-  && wget ${HEIF_URL}/v${HEIF_VERSION}/libheif-${HEIF_VERSION}.tar.gz \
-  && tar xzf libheif-${HEIF_VERSION}.tar.gz \
-  && cd libheif-${HEIF_VERSION} \
-  && ./configure --prefix=/usr/src/vips --disable-gtk-doc \
-  && make \
-  && make install
-
 ARG GIFLIB_VERSION=5.1.4
 ARG GIFLIB_URL=http://downloads.sourceforge.net/project/giflib
 
@@ -63,20 +51,20 @@ RUN cd /usr/src \
   && make \
   && make install
 
-ARG ORC_VERSION=0.4.28
-ARG ORC_URL=https://gstreamer.freedesktop.org/src/orc
+ARG ORC_VERSION=0.4.29
+ARG ORC_URL=https://gitlab.freedesktop.org/gstreamer/orc/-/archive/
 
 RUN cd /usr/src \
-  && wget ${ORC_URL}/orc-$ORC_VERSION.tar.xz \
-  && tar xf orc-${ORC_VERSION}.tar.xz \
+  && wget ${ORC_URL}/$ORC_VERSION/orc-$ORC_VERSION.tar.gz -O orc-${ORC_VERSION}.tar.gz \
+  && tar xf orc-${ORC_VERSION}.tar.gz \
   && cd orc-${ORC_VERSION} \
   && ./autogen.sh \
   && ./configure --prefix=/usr/src/vips --disable-gtk-doc \
   && make \
   && make install
 
-ARG GSF_VERSION=1.14.42
-ARG GSF_URL=http://ftp.gnome.org/pub/GNOME/sources/libgsf
+ARG GSF_VERSION=1.14.46
+ARG GSF_URL=https://ftp.gnome.org/pub/GNOME/sources/libgsf
 
 RUN cd /usr/src \
   && wget ${GSF_URL}/${GSF_VERSION%.*}/libgsf-$GSF_VERSION.tar.xz \
@@ -86,6 +74,42 @@ RUN cd /usr/src \
   && make \
   && make install
 
+
+# ARG LIBDE265_VERSION=1.0.5
+#
+# RUN cd /usr/src \
+#   && wget https://github.com/strukturag/libde265/releases/download/v${LIBDE265_VERSION}/libde265-${LIBDE265_VERSION}.tar.gz
+#   && tar -xvf libheif-$LIBDE265_VERSION.tar.gz \
+#   && cd libheif-$LIBDE265_VERSION \
+#   && ./autogen.sh \
+#   && ./configure --prefix=/usr/src/vips \
+#   && make \
+#   && make install
+
+# BUILD HEIF from src, so that we make sure to add libde265 support
+ARG HEIF_VERSION=1.11.0
+ARG HEIF_URL=https://github.com/strukturag/libheif/releases/download
+
+RUN cd /usr/src \
+  && wget ${HEIF_URL}/v${HEIF_VERSION}/libheif-${HEIF_VERSION}.tar.gz \
+  && tar xzf libheif-${HEIF_VERSION}.tar.gz \
+  && cd libheif-${HEIF_VERSION} \
+  && ./configure --prefix=/usr/src/vips \
+  && make \
+  && make install
+
+ARG WEBP_VERSION=1.1.0
+
+RUN cd /usr/src \
+      && wget https://github.com/webmproject/libwebp/archive/v$WEBP_VERSION.tar.gz \
+      && tar -xvf v$WEBP_VERSION.tar.gz \
+      && cd libwebp-$WEBP_VERSION \
+      && ./autogen.sh \
+      && ./configure --prefix=/usr/src/vips --enable-libwebpmux --enable-libwebpdemux --enable-libwebpdecoder \
+      && make \
+      && make install
+
+
 ARG VIPS_URL=https://github.com/libvips/libvips/releases/download
 
 RUN cd /usr/src \
@@ -93,7 +117,7 @@ RUN cd /usr/src \
   && tar xzf vips-${VIPS_VERSION}.tar.gz \
   && cd vips-${VIPS_VERSION} \
   && export PKG_CONFIG_PATH=/usr/src/vips/lib/pkgconfig \
-  && ./configure --prefix=/usr/src/vips --disable-gtk-doc \
+  && ./configure --prefix=/usr/src/vips --disable-gtk-doc --with-modules \
   && make \
   && make install
 

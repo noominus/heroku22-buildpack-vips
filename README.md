@@ -21,6 +21,8 @@ with pdf support on heroku. Thank you John!
 
 Heroku buildpack with [libvips](https://github.com/jcupitt/libvips) installed.
 
+some help from https://github.com/vietaapp/heroku-buildpack-vips
+
 
 ## Usage
 
