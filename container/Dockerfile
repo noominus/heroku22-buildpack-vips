@@ -18,6 +18,7 @@ RUN apt-get update && apt-get install -y \
   git \
   pkg-config
 
+
 # heroku:18 includes some libraries, like tiff and jpeg, as part of the
 # run-time platform, and we want to use those libs if we can
 #
@@ -36,7 +37,20 @@ RUN apt-get update && apt-get install -y \
   libxml2-dev \
   libfftw3-dev \
   libpoppler-glib-dev \
-  libheif-dev
+  libx265-dev \
+  libde265-dev
+
+# BUILD HEIF from src, so that we make sure to add libde265 support
+ARG HEIF_VERSION=1.11.0
+ARG HEIF_URL=https://github.com/strukturag/libheif/releases/download
+
+RUN cd /usr/src \
+  && wget ${HEIF_URL}/v${HEIF_VERSION}/libheif-${HEIF_VERSION}.tar.gz \
+  && tar xzf libheif-${HEIF_VERSION}.tar.gz \
+  && cd libheif-${HEIF_VERSION} \
+  && ./configure --prefix=/usr/src/vips --disable-gtk-doc \
+  && make \
+  && make install
 
 ARG GIFLIB_VERSION=5.1.4
 ARG GIFLIB_URL=http://downloads.sourceforge.net/project/giflib
