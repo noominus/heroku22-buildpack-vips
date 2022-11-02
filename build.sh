@@ -3,7 +3,7 @@
 # set -x
 set -e
 
-VIPS_VERSION=8.10.6
+VIPS_VERSION=8.13.3
 docker build --progress plain --build-arg VIPS_VERSION=${VIPS_VERSION} -t libvips-heroku20 container # uncomment this for testing (if helpful)
 #docker build --no-cache --build-arg VIPS_VERSION=${VIPS_VERSION} -t libvips-heroku20 container
 
