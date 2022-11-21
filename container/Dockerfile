@@ -26,6 +26,7 @@ RUN apt-get update && apt-get install -y \
 #
 # libgsf needs libxml2
 RUN apt-get update && apt-get install -y \
+  imagemagick \
   glib-2.0-dev \
   libexpat-dev \
   librsvg2-dev \
