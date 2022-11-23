@@ -26,7 +26,6 @@ RUN apt-get update && apt-get install -y \
 #
 # libgsf needs libxml2
 RUN apt-get update && apt-get install -y \
-  imagemagick \
   glib-2.0-dev \
   libexpat-dev \
   librsvg2-dev \
@@ -64,7 +63,7 @@ RUN cd /usr/src \
   && make \
   && make install
 
-ARG GSF_VERSION=1.14.46
+ARG GSF_VERSION=1.14.50
 ARG GSF_URL=https://ftp.gnome.org/pub/GNOME/sources/libgsf
 
 RUN cd /usr/src \
@@ -76,7 +75,7 @@ RUN cd /usr/src \
   && make install
 
 
-# ARG LIBDE265_VERSION=1.0.5
+# ARG LIBDE265_VERSION=1.0.9
 #
 # RUN cd /usr/src \
 #   && wget https://github.com/strukturag/libde265/releases/download/v${LIBDE265_VERSION}/libde265-${LIBDE265_VERSION}.tar.gz
@@ -88,7 +87,7 @@ RUN cd /usr/src \
 #   && make install
 
 # BUILD HEIF from src, so that we make sure to add libde265 support
-ARG HEIF_VERSION=1.11.0
+ARG HEIF_VERSION=1.14.0
 ARG HEIF_URL=https://github.com/strukturag/libheif/releases/download
 
 RUN cd /usr/src \
@@ -99,7 +98,7 @@ RUN cd /usr/src \
   && make \
   && make install
 
-ARG WEBP_VERSION=1.1.0
+ARG WEBP_VERSION=1.2.4
 
 RUN cd /usr/src \
       && wget https://github.com/webmproject/libwebp/archive/v$WEBP_VERSION.tar.gz \
@@ -107,6 +106,18 @@ RUN cd /usr/src \
       && cd libwebp-$WEBP_VERSION \
       && ./autogen.sh \
       && ./configure --prefix=/usr/src/vips --enable-libwebpmux --enable-libwebpdemux --enable-libwebpdecoder \
+      && make \
+      && make install
+
+
+ARG IMAGEMAGICK_VERSION=7.1.0-52
+ARG IMAGEMAGICK_URL=https://imagemagick.org/archive/
+
+RUN cd /usr/src \
+      && wget ${IMAGEMAGICK_URL}/ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz \
+      && tar -xvf ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz \
+      && cd ImageMagick-${IMAGEMAGICK_VERSION} \
+      && ./configure --prefix=/usr/src/vips --with-modules \
       && make \
       && make install
 

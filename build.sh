@@ -4,7 +4,7 @@
 set -e
 
 VIPS_VERSION=8.13.3
-docker build --progress plain --build-arg VIPS_VERSION=${VIPS_VERSION} -t libvips-heroku22 container # uncomment this for testing (if helpful)
+docker build --progress plain --build-arg VIPS_VERSION=${VIPS_VERSION} -t libvips-heroku22 container 2>&1 | tee build/output.log.txt # uncomment this for testing (if helpful)
 #docker build --no-cache --build-arg VIPS_VERSION=${VIPS_VERSION} -t libvips-heroku22 container
 
 mkdir -p build
